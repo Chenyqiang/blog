@@ -13,8 +13,19 @@
 
 <nav>
 <span><a title="Ö÷Ò³" href="/">home</a></span>
-<span><a title="µÇÂ¼" href="/login">login</a></span>
-<span><a title="×¢²á" href="/reg">register</a></span>
+<% if(user){ %>
+  <span><a title="·¢±í" href="/post">post</a></span>
+  <span><a title="µÇ³ö" href="/logout">logout</a></span>
+<% } else { %>
+  <span><a title="µÇÂ¼" href="/login">login</a></span>
+  <span><a title="×¢²á" href="/reg">register</a></span>
+<% } %>
 </nav>
 
 <article>
+<% if(success) { %>
+  <div><%= success %></div>
+<% } %>
+<% if(error) { %>
+  <div><%= error %> </div>
+<% } %>

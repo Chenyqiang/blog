@@ -6,9 +6,9 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
+var flash = require('connect-flash');
 
 var routes = require('./routes/index');
-//var users = require('./routes/users');
 var settings = require('./settings');
 
 // 生成一个express实例app
@@ -18,7 +18,6 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 // 设置视图模板引擎为 ejs
 app.set('view engine', 'ejs');
-
 // 设置/public/favicon.ico为favicon图标
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 // 加载日志中间件
@@ -31,11 +30,23 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 // 设置public文件夹为存放静态文件的目录
 app.use(express.static(path.join(__dirname, 'public')));
+// 设置session
+app.use(session({
+  secret: settings.cookieSecret,
+  key: settings.db,//cookie name
+  cookie: {maxAge: 1000 * 60 * 60 * 24 * 30},//30 days
+  store: new MongoStore({
+	url: 'mongodb://localhost/blog'
+  })
+}));
+/*
+* 设置flash，flash是session中用于存储信息的特定区域
+* 1.flash要放在session后面，否则会报错 req.flash() requires sessions
+* 2.express3.0以上默认已经不支持flash了，你需要先使用npm install connect-flash
+*/
+app.use(flash());
 
-// 路由控制器
-//app.use('/', routes);
-//app.use('/users', users);
-// FIXME 路由的问题导致了 app.post is not a function
+// 要在app.use()后面执行
 routes(app);
 
 // 捕获404错误，并转发到错误处理器
@@ -44,6 +55,7 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
+
 
 // 开发环境下的错误处理器，将错误信息渲染error模版并显示到浏览器中
 if (app.get('env') === 'development') {
@@ -64,18 +76,6 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
-app.use(session({
-  secret: settings.cookieSecret,
-  key: settings.db,//cookie name
-  cookie: {maxAge: 1000 * 60 * 60 * 24 * 30},//30 days
-  store: new MongoStore({
-    db: settings.db,
-    host: settings.host,
-    port: settings.port
-	//url: 'mongodb://localhost/blog'
-  })
-}));
 
 // 导出app实例供其他模块调用
 module.exports = app;
