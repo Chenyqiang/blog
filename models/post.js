@@ -1,4 +1,4 @@
-var mongdb = require('./db');
+var mongodb = require('./db');
 
 function Post(name,title,post){
 	this.name = name;
@@ -8,10 +8,10 @@ function Post(name,title,post){
 
 module.exports = Post;
 
-// ´æ´¢Ò»ÆªÎÄÕÂÒÔ¼°Ïà¹ØĞÅÏ¢
+// å­˜å‚¨ä¸€ç¯‡æ–‡ç« åŠå…¶ç›¸å…³ä¿¡æ¯
 Post.prototype.save = function(callback){
 	var date = new Date();
-	// ´æ´¢¸÷ÖÖÊ±¼ä¸ñÊ½
+	// å­˜å‚¨å„ç§æ—¶é—´æ ¼å¼ï¼Œæ–¹ä¾¿ä»¥åæ‰©å±•
 	var time={
 		date:date,
 		year : date.getFullYear(),
@@ -20,7 +20,7 @@ Post.prototype.save = function(callback){
 		minute : date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " + 
 		date.getHours() + ":" + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) 
 	};
-	// Òª´æÈëÊı¾İ¿âµÄÎÄµµ
+	// è¦å­˜å…¥æ•°æ®åº“çš„æ–‡æ¡£
 	var post={
 		name:this.name,
 		time:time,
@@ -31,13 +31,13 @@ Post.prototype.save = function(callback){
 		if(err){
 			return callback(err);
 		}
-		// ¶ÁÈ¡ posts ¼¯ºÏ
+		// æ‰“å¼€æ•°æ®åº“
 		db.collection('posts',function(err,collection){
 			if(err){
 				mongodb.close();
 				return callback(err);
 			}
-			// ½«ÎÄµµ²åÈë posts¼¯ºÏ
+			// è¯»å– posts é›†åˆ
 			collection.insert(post,{safe:true},
 			function(err){
 				mongodb.close();
@@ -50,14 +50,14 @@ Post.prototype.save = function(callback){
 	});
 };
 
-// ¶ÁÈ¡ÎÄÕÂ¼°ÆäÏà¹ØĞÅÏ¢
+// è¯»å–æ–‡ç« åŠå…¶ç›¸å…³ä¿¡æ¯
 Post.get = function(name,callback){
-	//´ò¿ªÊı¾İ¿â
+	//æ‰“å¼€æ•°æ®åº“
 	mongodb.open(function(err,db){
 		if(err){
 			return callback(err);
 		}
-		// ¶ÁÈ¡ posts ¼¯ºÏ
+		// è¯»å– posts é›†åˆ
 		db.collection('posts',function(err,collection){
 			if(err){
 				mongodb.close();
@@ -67,7 +67,7 @@ Post.get = function(name,callback){
 			if (name) {
 				query.name = name;
 			}
-			// ¸ù¾İ query ¶ÔÏó²éÑ¯ÎÄÕÂ
+			// æ ¹æ® query å¯¹è±¡æŸ¥è¯¢æ–‡ç« 
 			collection.find(query).sort({
 				time:-1
 			}).toArray(function(err,docs){
