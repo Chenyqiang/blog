@@ -1,7 +1,88 @@
 <%- include header %>
-<form method="post">
-用户名：<input type="text" name="name"/><br />
-  密码：  <input type="password" name="password"/><br />
-         <input type="submit" value="登录"/>
-</form>
+<div id="page-wrapper">
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <div class="row">
+			<div class="col-lg-12">
+				<h1 class="page-header">
+					<%-title%>
+				</h1>
+				<ol class="breadcrumb">
+					<li>
+						<i class="fa fa-dashboard"></i>  <a href="/">Dashboard</a>
+					</li>
+					<li class="active">
+						<i class="fa fa-edit"></i> <%-title%>
+					</li>
+				</ol>
+			</div>
+		</div>
+        <!-- /.row -->
+
+        <div class="row" id="alert-message">
+            <div class="col-lg-12">
+			<% if(success) { %>
+			  <div class="alert alert-info alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <i class="fa fa-info-circle"></i>  <strong><%= success %></strong> Try out for additional features!
+              </div>
+			<% } %>
+			<% if(error) { %>
+				<div class="alert alert-danger alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <i class="fa fa-info-circle"></i>  <strong><%= error %></strong> Try out for additional features!
+              </div>
+			<% } %>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <div class="row">
+			<div class="col-lg-12">
+				<!-- /#page-wrapper -->
+				<form class="form-horizontal" role="form" method="post" id="loginFrom">
+				   <div class="form-group">
+					  <div class="col-sm-7">
+						 <input type="text" class="form-control" id="name"  name="name"
+							placeholder="请输入用户名..." autofocus="autofocus" maxlength="20">
+					  </div>
+					  <div class="col-sm-7">
+						 <input type="password" class="form-control" id="password" name="password"
+							placeholder="请输入密码..." maxlength="10">
+					  </div>
+					  <div class="col-sm-offset-5 col-sm-7">
+						 <button type="submit" class="btn btn-success"> 登 录 </button>
+					  </div>
+				   </div>
+				</form>
+			</div>
+        </div>
+        <!-- /.row -->
+        
+    </div>
+    
+</div>
+
+<script type="text/javascript" src="/jquery-validation/jquery.validate.min.js" ></script>
+<script type="text/javascript" src="/jquery-validation/messages_bs_zh.js" ></script>
+<script>
+$().ready(function() {
+	  $("#loginFrom").validate({
+	  	onkeyup:false,
+	  	rules:{
+	  		name: {
+	        required: true
+	      },
+	      password: {
+	        required: true,
+	        minlength: 6
+	      }
+	  	},
+      submitHandler:function(form){
+        form.submit();
+      }  
+	});
+});
+</script>
 <%- include footer %>

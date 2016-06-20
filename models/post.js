@@ -76,9 +76,9 @@ Post.get = function(name,callback){
 				if (err) {
 					return callback(err);
 				}
-				// 解析markdown 为html
-				docs.forEach(function(doc){
-					doc.post = markdown.toHTML(doc.post);
+				//解析 markdown 为 html
+				docs.forEach(function (doc) {
+				  doc.post = markdown.toHTML(doc.post);
 				});
 				callback(null,docs);
 			});

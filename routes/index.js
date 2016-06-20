@@ -17,7 +17,7 @@ module.exports = function(app){
 			});
 		});
 	});
-	app.get('/reg', checkNotLogin);
+	//app.get('/reg', checkNotLogin);
 	app.get('/reg',function(req,res){
 		res.render('reg',{
 			title:'注册',
@@ -26,19 +26,29 @@ module.exports = function(app){
 			error:req.flash('error').toString()
 		});
 	});
-	app.get('/reg', checkNotLogin);
+	/* 存在问题
+	app.get('/reg/checkName',function(req,res){
+		// req.query 获取URL的查询参数串
+		var name = req.query.name;
+		User.get(name , function(err,user){
+			if (err) {
+				req.flash('error',err);
+				return res.redirect('/');
+			}
+			if (user) {
+				return "true";
+			}
+			return "false";
+		});
+	});
+	*/
+	//app.get('/reg', checkNotLogin);
 	app.post('/reg',function(req,res){
-		var name = req.body.name,
-		password = req.body.password,
-		password_re = req.body['password-repeat'];
-		// 检查两次输入的密码是否一致
-		if (password_re != password) {
-			req.flash('error','两次密码不一致');
-			return res.redirect('/reg');
-		}
+		var name = req.body.name;
+		var password = req.body.password;
 		// 生成密码的 md5 值
-		var md5 = crypto.createHash('md5'),
-		password = md5.update(req.body.password).digest('hex');
+		var md5 = crypto.createHash('md5');
+		var password = md5.update(req.body.password).digest('hex');
 		var newUser = new User({
 			name : name ,
 			password : password,
@@ -67,7 +77,7 @@ module.exports = function(app){
 			});
 		});
 	});
-	app.get('/login', checkNotLogin);
+	//app.get('/login', checkNotLogin);
 	app.get('/login',function(req,res){
 		res.render('login',{
 			title:'登录',
@@ -76,7 +86,7 @@ module.exports = function(app){
 			error:req.flash('error').toString()
 		});
 	});
-	app.post('/login', checkNotLogin);
+	//app.post('/login', checkNotLogin);
 	app.post('/login',function(req,res){
 		// 生成密码的md5值
 		var md5 = crypto.createHash('md5');
@@ -120,7 +130,7 @@ module.exports = function(app){
 			res.redirect('/');
 		});
 	});
-	app.get('/logout', checkLogin);
+	//app.get('/logout', checkLogin);
 	app.get('/logout',function(req,res){
 		req.session.user = null;
 		req.flash('success', '登出成功!');
