@@ -1,0 +1,83 @@
+<%- include header %>
+<div id="page-wrapper">
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <div class="row">
+			<div class="col-lg-12">
+				<h1 class="page-header">
+					<%-title%>
+				</h1>
+				<ol class="breadcrumb">
+					<li>
+						<i class="fa fa-dashboard"></i>  <a href="/">Dashboard</a>
+					</li>
+					<li class="active">
+						<i class="fa fa-edit"></i> <%-title%>
+					</li>
+				</ol>
+			</div>
+		</div>
+        <!-- /.row -->
+
+        <div class="row" id="alert-message">
+            <div class="col-lg-12">
+			<% if(success) { %>
+			  <div class="alert alert-info alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <i class="fa fa-info-circle"></i>  <strong><%= success %></strong> Try out for additional features!
+              </div>
+			<% } %>
+			<% if(error) { %>
+				<div class="alert alert-danger alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <i class="fa fa-info-circle"></i>  <strong><%= error %></strong> Try out for additional features!
+              </div>
+			<% } %>
+            </div>
+        </div>
+        <!-- /.row -->
+
+        <div class="row">
+			<div class="col-lg-12">
+				<!-- /#page-wrapper -->
+				<form class="form-horizontal" role="form" method="post" action='/upload' enctype='multipart/form-data'>
+				   <div class="form-group">
+					  <div class="col-sm-7">
+						  <a href="javascript:void(0)"  class="a-upload">
+							<input type="file" multiple name='field'/>选择图片
+						  </a>
+						  <input type="submit" class="btn btn-success" value=" 提 交 "/>
+					  </div>
+				   </div>
+				</form>
+			</div>
+        </div>
+        <!-- /.row -->
+        
+    </div>
+    
+</div>
+
+<script type="text/javascript" src="/jquery-validation/jquery.validate.min.js" ></script>
+<script type="text/javascript" src="/jquery-validation/messages_bs_zh.js" ></script>
+<script>
+$().ready(function() {
+	  $("#loginFrom").validate({
+	  	onkeyup:false,
+	  	rules:{
+	  		name: {
+	        required: true
+	      },
+	      password: {
+	        required: true,
+	        minlength: 6
+	      }
+	  	},
+      submitHandler:function(form){
+        form.submit();
+      }  
+	});
+});
+</script>
+<%- include footer %>
